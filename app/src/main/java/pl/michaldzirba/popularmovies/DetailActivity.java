@@ -3,6 +3,7 @@ package pl.michaldzirba.popularmovies;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -14,9 +15,9 @@ import pl.michaldzirba.popularmovies.data.Movie;
 import static pl.michaldzirba.popularmovies.data.Movie.Size.w185;
 
 /**
- * show movie details
+ * show movie details, movie is passed via intent
  */
-public class DetailActivity extends Activity {
+public class DetailActivity extends AppCompatActivity {
 
     protected Movie movie_;
     protected TextView title_;
@@ -26,8 +27,8 @@ public class DetailActivity extends Activity {
     protected TextView plot_;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(final Bundle argSavedInstanceState) {
+        super.onCreate(argSavedInstanceState);
         setContentView(R.layout.activity_detail);
 
         final Intent intent = getIntent();
@@ -53,6 +54,8 @@ public class DetailActivity extends Activity {
         posterDetail_ = findViewById(R.id.iv_movie_poster_detail);
         releaseDate_ = findViewById(R.id.tv_releaseDate);
         rating_ = findViewById(R.id.tv_rating);
+        rating_.setIsIndicator(true); // does not allow changes 
+
         plot_ = findViewById(R.id.tv_plot);
     }
 
