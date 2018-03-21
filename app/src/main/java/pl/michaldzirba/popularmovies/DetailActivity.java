@@ -21,7 +21,6 @@ public class DetailActivity extends Activity {
     protected TextView title_;
     protected ImageView posterDetail_;
     protected TextView releaseDate_;
-    protected TextView length_;
     protected TextView rating_;
     protected TextView plot_;
 
@@ -42,7 +41,6 @@ public class DetailActivity extends Activity {
     protected void refresh(final Movie argMovie) {
         this.title_.setText(argMovie.title);
         this.releaseDate_.setText(argMovie.releaseDate);
-//        this.length_.setText(argMovie.length);
         this.rating_.setText(""+argMovie.rating);
         this.plot_.setText(argMovie.plot);
 
@@ -53,7 +51,6 @@ public class DetailActivity extends Activity {
         title_ = findViewById(R.id.tv_title);
         posterDetail_ = findViewById(R.id.iv_movie_poster_detail);
         releaseDate_ = findViewById(R.id.tv_releaseDate);
-        length_ = findViewById(R.id.tv_length);
         rating_ = findViewById(R.id.tv_rating);
         plot_ = findViewById(R.id.tv_plot);
     }

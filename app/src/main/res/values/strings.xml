@@ -2,4 +2,8 @@
     <string name="app_name">PopularMovies</string>
     <string name="sort_popular">Most Popular</string>
     <string name="sort_rating">Best Rated</string>
+
+    <string name="error_no_network">No network.</string>
+
+    <string name="retry">Retry</string>
 </resources>

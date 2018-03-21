@@ -1,18 +1,19 @@
 package pl.michaldzirba.popularmovies;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,6 +31,8 @@ import pl.michaldzirba.popularmovies.data.Movie;
 import pl.michaldzirba.popularmovies.data.MovieDataProvider;
 import pl.michaldzirba.popularmovies.data.MovieRequestQueue;
 
+import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
+
 /**
  * In this stage you’ll build the core experience of your movies app.
  * <p>
@@ -45,7 +48,7 @@ import pl.michaldzirba.popularmovies.data.MovieRequestQueue;
  * user rating (called vote_average in the api)
  * release date
  */
-public class MainActivity extends Activity implements MovieDataAdapter.IMovieClickListener {
+public class MainActivity extends AppCompatActivity implements MovieDataAdapter.IMovieClickListener {
     protected final static String url_movies_popular = "/movie/popular";
     protected final static String url_movies_toprated = "/movie/top_rated";
 
@@ -54,10 +57,9 @@ public class MainActivity extends Activity implements MovieDataAdapter.IMovieCli
     protected String apikey_ = null;
 
     protected RecyclerView recyclerView_;
-    protected MovieDataAdapter adapter_;
-    protected RecyclerView.LayoutManager layoutManager_;
     protected MovieDataProvider movieDataProvider_;
     protected RequestQueue requestQueue_;
+    protected SwipeRefreshLayout mainLayout_;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -91,13 +93,24 @@ public class MainActivity extends Activity implements MovieDataAdapter.IMovieCli
     protected void init() {
         requestQueue_ = MovieRequestQueue.getInstance(this.getApplicationContext()).getRequestQueue();
         movieDataProvider_ = new MovieDataProvider();
+        mainLayout_ = findViewById(R.id.main_layout);
         recyclerView_ = findViewById(R.id.rv_movies);
-        recyclerView_.setHasFixedSize(false);
-        layoutManager_ = new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false);
-        recyclerView_.setLayoutManager(layoutManager_);
 
-        adapter_ = new MovieDataAdapter(movieDataProvider_, this);
-        recyclerView_.setAdapter(adapter_);
+        recyclerView_.setHasFixedSize(true);
+        recyclerView_.setLayoutManager(new GridLayoutManager(this, 2, VERTICAL, false));
+        recyclerView_.setAdapter(new MovieDataAdapter(movieDataProvider_, this));
+
+        mainLayout_.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        MovieRequestQueue.getInstance(MainActivity.this).clear();
+                        refresh();
+                    }
+                }
+        );
+
+
         refresh();
     }
 
@@ -116,36 +129,47 @@ public class MainActivity extends Activity implements MovieDataAdapter.IMovieCli
             case R.id.menu_popular:
                 appurl_ = url_movies_popular;
                 return refresh();
-
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     /**
      * reload data, refresh view
      */
     protected boolean refresh() {
+        mainLayout_.setRefreshing(true);
+
         requestQueue_.add(new JsonObjectRequest
                 (Request.Method.GET, getUrl(), null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(final JSONObject response) {
                         movieDataProvider_.refresh(response);
+                        mainLayout_.setRefreshing(false);
                         MainActivity.this.animation(recyclerView_);
                     }
                 }, new Response.ErrorListener() {
-
                     @Override
-                    public void onErrorResponse(final VolleyError error) {
-//                        Snackbar.
-//                        or activity error, with "retry" calling this back
-
-                        Toast.makeText(MainActivity.this, "No internet connection. (" + error.getMessage() + ")", Toast.LENGTH_LONG).show();
+                    public void onErrorResponse(final VolleyError argError) {
+                        mainLayout_.setRefreshing(false);
+                        MainActivity.this.showError(argError);
                     }
                 }
                 )).setTag(MovieRequestQueue.VOLLEY_QUEUE_TAG);
         return true;
     }
+
+    protected void showError(final VolleyError argError) {
+        final Snackbar problem = Snackbar.make(mainLayout_, R.string.error_no_network, Snackbar.LENGTH_LONG);
+        problem.setAction(R.string.retry, new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                problem.dismiss();
+                refresh();
+            }
+        }).show();
+
+    }
+
 
     protected void animation(final RecyclerView recyclerView) {
         final Context context = recyclerView.getContext();
@@ -165,19 +189,9 @@ public class MainActivity extends Activity implements MovieDataAdapter.IMovieCli
     }
 
     @Override
-    protected void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(final Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
-        MovieRequestQueue.getInstance(this).close();
+        MovieRequestQueue.getInstance(MainActivity.this).clear();
     }
 
     public String getUrl() {

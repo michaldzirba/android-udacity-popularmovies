@@ -36,7 +36,7 @@ public class MovieRequestQueue {
         return requestQueue_;
     }
 
-    public void close() {
+    public void clear() {
         if (requestQueue_ != null) {
             requestQueue_.cancelAll(VOLLEY_QUEUE_TAG);
             requestQueue_.getCache().clear();
