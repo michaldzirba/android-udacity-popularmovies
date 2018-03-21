@@ -54,7 +54,7 @@ public class DetailActivity extends AppCompatActivity {
         posterDetail_ = findViewById(R.id.iv_movie_poster_detail);
         releaseDate_ = findViewById(R.id.tv_releaseDate);
         rating_ = findViewById(R.id.tv_rating);
-        rating_.setIsIndicator(true); // does not allow changes 
+        rating_.setIsIndicator(true); // does not allow changes
 
         plot_ = findViewById(R.id.tv_plot);
     }
