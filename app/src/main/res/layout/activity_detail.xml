@@ -1,9 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="pl.michaldzirba.popularmovies.DetailActivity">
 
-</android.support.constraint.ConstraintLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="0dp"
+        tools:context="pl.michaldzirba.popularmovies.DetailActivity">
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorMovieTitle"
+            android:paddingBottom="33dp"
+            android:paddingLeft="33dp"
+            android:paddingTop="33dp"
+            android:text="Title"
+            android:textColor="@android:color/white"
+            android:textSize="44dp"
+            android:textStyle="bold" />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            tools:context="pl.michaldzirba.popularmovies.DetailActivity">
+
+            <ImageView
+                android:id="@+id/iv_movie_poster_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp"
+                tools:context="pl.michaldzirba.popularmovies.DetailActivity">
+
+                <TextView
+                    android:id="@+id/tv_releaseDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="releaseDate"
+                    android:paddingTop="10dp"
+                    android:gravity="top"
+                    android:textSize="22dp" />
+
+                <TextView
+                    android:id="@+id/tv_length"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="length"
+                    android:gravity="top"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/tv_rating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="rating"
+                    android:paddingTop="10dp"
+                    android:gravity="top"
+                    android:textSize="16dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_plot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="10dp"
+            android:text="plot"
+            android:textSize="14dp" />
+
+    </LinearLayout>
+</ScrollView>
