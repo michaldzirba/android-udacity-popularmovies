@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -22,10 +21,9 @@ import static pl.michaldzirba.popularmovies.data.Movie.Size.w185;
 public class MovieDataAdapter extends RecyclerView.Adapter<MovieDataAdapter.MovieAdapterViewHolder> {
     protected final MovieDataProvider dataProvider_;
     protected IMovieClickListener listener_;
-    protected int lastPosition = -1;
 
     protected interface IMovieClickListener {
-        public void onClick(final Movie argMovie);
+        void onClick(final Movie argMovie);
     }
 
     protected MovieDataAdapter(final MovieDataProvider argDataProvider, final IMovieClickListener argListener) {

@@ -40,22 +40,22 @@ public class DetailActivity extends Activity {
     }
 
     protected void refresh(final Movie argMovie) {
-        this.title_.setText( argMovie.title );
-        this.releaseDate_.setText( argMovie.releaseDate );
-        this.length_.setText( argMovie.length );
-        this.rating_.setText( argMovie.rating );
-        this.plot_.setText( argMovie.plot );
+        this.title_.setText(argMovie.title);
+        this.releaseDate_.setText(argMovie.releaseDate);
+//        this.length_.setText(argMovie.length);
+        this.rating_.setText(""+argMovie.rating);
+        this.plot_.setText(argMovie.plot);
 
         Picasso.with(this).load(argMovie.poster(w185)).into(this.posterDetail_);
     }
 
     protected void init() {
-        title_ = (TextView) findViewById(R.id.tv_title);
-        posterDetail_ = (ImageView) findViewById(R.id.iv_movie_poster_detail);
-        releaseDate_ = (TextView) findViewById(R.id.tv_releaseDate);
-        length_ = (TextView) findViewById(R.id.tv_length);
-        rating_ = (TextView) findViewById(R.id.tv_rating);
-        plot_ = (TextView) findViewById(R.id.tv_plot);
+        title_ = findViewById(R.id.tv_title);
+        posterDetail_ = findViewById(R.id.iv_movie_poster_detail);
+        releaseDate_ = findViewById(R.id.tv_releaseDate);
+        length_ = findViewById(R.id.tv_length);
+        rating_ = findViewById(R.id.tv_rating);
+        plot_ = findViewById(R.id.tv_plot);
     }
 
     public static final String INTENT_PARAMETER = "movie";

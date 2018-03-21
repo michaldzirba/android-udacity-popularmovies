@@ -4,6 +4,9 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * data class for movie information
  * <p>
@@ -15,9 +18,8 @@ public class Movie implements Parcelable {
     public int id;
     public String title;
     public String releaseDate; // ????
-    public String rating; // ????
+    public double rating; // ????
     public String plot;
-    public String length;
 
     protected String url;
 
@@ -34,9 +36,17 @@ public class Movie implements Parcelable {
         title = argIn.readString();
         url = argIn.readString();
         releaseDate = argIn.readString();
-        rating = argIn.readString();
+        rating = argIn.readDouble();
         plot = argIn.readString();
-        length = argIn.readString();
+    }
+
+    public Movie(final JSONObject argJSONObject) throws JSONException {
+        id = argJSONObject.getInt("id");
+        title = argJSONObject.getString("title");
+        url = argJSONObject.getString("poster_path");
+        releaseDate = argJSONObject.getString("release_date");
+        rating = argJSONObject.getDouble("vote_average");
+        plot = argJSONObject.getString("overview");
     }
 
     @Override
@@ -45,10 +55,8 @@ public class Movie implements Parcelable {
         argDest.writeString(title);
         argDest.writeString(url);
         argDest.writeString(releaseDate);
-        argDest.writeString(rating);
+        argDest.writeDouble(rating);
         argDest.writeString(plot);
-
-        argDest.writeString(length);
     }
 
     @Override
