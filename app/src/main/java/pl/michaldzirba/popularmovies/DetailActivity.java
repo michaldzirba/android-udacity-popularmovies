@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -21,7 +22,7 @@ public class DetailActivity extends Activity {
     protected TextView title_;
     protected ImageView posterDetail_;
     protected TextView releaseDate_;
-    protected TextView rating_;
+    protected RatingBar rating_;
     protected TextView plot_;
 
     @Override
@@ -41,7 +42,7 @@ public class DetailActivity extends Activity {
     protected void refresh(final Movie argMovie) {
         this.title_.setText(argMovie.title);
         this.releaseDate_.setText(argMovie.releaseDate);
-        this.rating_.setText(""+argMovie.rating);
+        this.rating_.setRating((float) argMovie.rating / 2); // web rating is < 10, we have 5 stars
         this.plot_.setText(argMovie.plot);
 
         Picasso.with(this).load(argMovie.poster(w185)).into(this.posterDetail_);
