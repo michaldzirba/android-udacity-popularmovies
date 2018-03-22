@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements MovieDataAdapter.
     protected String appurl_ = url_movies_popular;
     protected String baseurl_ = "http://api.themoviedb.org/3";
     protected String apikey_ = null;
+    protected static int posterWidth_ = Movie.w185;
 
     protected RecyclerView recyclerView_;
     protected MovieDataProvider movieDataProvider_;
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements MovieDataAdapter.
         recyclerView_ = findViewById(R.id.rv_movies);
 
         recyclerView_.setHasFixedSize(true);
-        recyclerView_.setLayoutManager(new GridLayoutManager(this, 2, VERTICAL, false));
+        recyclerView_.setLayoutManager(new GridLayoutManager(this, getNumberOfColumns(), VERTICAL, false));
         recyclerView_.setAdapter(new MovieDataAdapter(movieDataProvider_, this));
 
         mainLayout_.setOnRefreshListener(
@@ -112,6 +114,13 @@ public class MainActivity extends AppCompatActivity implements MovieDataAdapter.
 
 
         refresh();
+    }
+
+    protected int getNumberOfColumns() {
+        final DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        final int nColumns = displayMetrics.widthPixels / posterWidth_;
+        return (nColumns < 2) ? 2 : nColumns;
     }
 
     @Override
@@ -159,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements MovieDataAdapter.
     }
 
     protected void showError(final VolleyError argError) {
-        final Snackbar problem = Snackbar.make(mainLayout_, R.string.error_no_network, Snackbar.LENGTH_LONG);
+        final Snackbar problem = Snackbar.make(mainLayout_, argError.getMessage(), Snackbar.LENGTH_LONG);
         problem.setAction(R.string.retry, new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

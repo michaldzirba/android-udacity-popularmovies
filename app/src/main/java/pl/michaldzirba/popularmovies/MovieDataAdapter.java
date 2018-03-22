@@ -12,8 +12,6 @@ import com.squareup.picasso.Picasso;
 import pl.michaldzirba.popularmovies.data.Movie;
 import pl.michaldzirba.popularmovies.data.MovieDataProvider;
 
-import static pl.michaldzirba.popularmovies.data.Movie.Size.w185;
-
 /**
  * Adapter for the movie / poster view
  * Created by Michal on 3/20/2018.
@@ -66,7 +64,11 @@ public class MovieDataAdapter extends RecyclerView.Adapter<MovieDataAdapter.Movi
 
         public void update(final Movie argMovie) {
             this.movie_ = argMovie;
-            Picasso.with(mPoster.getContext()).load(argMovie.poster(w185)).into(mPoster);
+            Picasso.with(mPoster.getContext())
+                    .load(argMovie.poster(MainActivity.posterWidth_))
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .error(R.drawable.ic_missing_poster)
+                    .into(mPoster);
         }
 
         @Override

@@ -3,9 +3,14 @@ package pl.michaldzirba.popularmovies.data;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.IntDef;
+import android.support.annotation.StringDef;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * data class for movie information
@@ -13,8 +18,6 @@ import org.json.JSONObject;
  * Created by Michal on 3/20/2018.
  */
 public class Movie implements Parcelable {
-    public enum Size {w92, w154, w185, w342, w500, w780, original}
-
     public int id;
     public String title;
     public String releaseDate; // ????
@@ -26,8 +29,8 @@ public class Movie implements Parcelable {
     public Movie() {
     }
 
-    public Uri poster(final Size argSize) {
-        return Uri.parse(baseurl + argSize + url);
+    public Uri poster(final @PosterSize int argSize) {
+        return Uri.parse(baseurl + "w" + argSize + url);
     }
 
     // "De-parcel object
@@ -75,4 +78,17 @@ public class Movie implements Parcelable {
         }
     };
     protected static final String baseurl = "http://image.tmdb.org/t/p/";
+
+    public static final int w92 = 92;
+    public static final int w154 = 154;
+    public static final int w185 = 185;
+    public static final int w342 = 342;
+    public static final int w500 = 500;
+    public static final int w780 = 780;
+//    public static final int original = "original";
+
+    @IntDef({w92, w154, w185, w342, w500, w780})// , originalł
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface PosterSize {
+    }
 }
